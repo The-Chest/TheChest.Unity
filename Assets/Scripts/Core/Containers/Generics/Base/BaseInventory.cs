@@ -200,7 +200,7 @@ namespace TheChest.Containers.Generics.Base
                     return new T[0];
             }
 
-            return items[index..];
+            return items.Skip(index).ToArray();
         }
     }
 }

@@ -4,7 +4,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "TheChest"
+        "TheChest.Unity.Core",
+        "TheChest.Unity.Examples"
     ],
     "includePlatforms": [
         "Editor"

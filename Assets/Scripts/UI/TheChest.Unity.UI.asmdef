@@ -2,7 +2,9 @@
     "name": "TheChest.Unity.UI",
     "rootNamespace": "TheChest.Unity.UI",
     "references": [
-        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:c041fb4c7b65355488798072b02e805e",
+        "GUID:89f1c4f4da98777419bcd831196eda62"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

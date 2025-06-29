@@ -1,7 +1,9 @@
 {
-    "name": "TheChest",
-    "rootNamespace": "TheChest",
-    "references": [],
+    "name": "TheChest.Unity.Examples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:89f1c4f4da98777419bcd831196eda62"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
