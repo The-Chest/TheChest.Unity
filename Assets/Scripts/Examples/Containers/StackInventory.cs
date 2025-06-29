@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
-using TheChest.Containers.Generics.Base;
 using TheChest.Examples.Items;
-using TheChest.Slots.Generics.Interfaces;
+using TheChest.Inventories.Containers;
+using TheChest.Core.Slots.Interfaces;
+using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Examples.Containers
 {
-    public class StackInventory : BaseStackInventory<Item>
+    public class StackInventory : StackInventory<Item>
     {
         [SerializeField]
         protected StackSlot[] slots;
 
-        public override ISlot<Item>[] Slots
+        public override IStackSlot<Item>[] Slots
         {
             get
             {
-                return slots;
+                return (IStackSlot<Item>[])slots;
             }
             protected set
             {
@@ -22,11 +23,7 @@ namespace TheChest.Examples.Containers
             }
         }
 
-        public StackInventory(int count) : base(count)
-        {
-        }
-
-        public StackInventory(StackSlot[] slots) : base(slots)
+        public StackInventory(StackSlot[] slots) : base(slots as IInventoryStackSlot<Item>[])
         {
         }
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using TheChest.Slots.Generics.Base;
 using TheChest.Examples.Items;
+using TheChest.Inventories.Slots;
+using System.Linq;
 
 namespace TheChest.Examples.Containers
 {
@@ -8,66 +9,25 @@ namespace TheChest.Examples.Containers
     /// Slot with stackable items and serializable Fields
     /// </summary>
     [System.Serializable]
-    public class StackSlot : BaseInventoryStackSlot<Item>
+    public class StackSlot : InventoryStackSlot<Item>
     {
-        #region properties
         /// <summary>
-        /// Current item inside the slot
+        /// Current items inside the slot
         /// </summary>
         [SerializeField]
-        private Item item;
+        private Item[] items;
 
-        public override Item CurrentItem {
-            get {
-                return this.item;
-            }
-            protected set {
-                this.item = value;
-            }
-        }
+        public override Item[] Content => this.items;
 
         [SerializeField]
         private int stackAmount;
 
-        public override int StackAmount {
-            get {
-                return this.stackAmount;
-            }
-            protected set {
-                this.stackAmount = value;
-            }
-        }
+        public override int StackAmount  => this.stackAmount;
 
-        public override int MaxStackAmount => this.CurrentItem?.MaxStack??1;
-        #endregion
+        public override int MaxStackAmount => this.Content.FirstOrDefault()?.MaxStack ?? 1;
 
-        /// <summary>
-        /// Creates an Slot with an Item
-        /// </summary>
-        /// <param name="CurrentItem">Item inside the slot (can be null)</param>
-        /// <param name="amount">Amount of <paramref name="CurrentItem"/> (0 if item is null)</param>
-        public StackSlot(Item CurrentItem = null,int amount = 1) 
+        public StackSlot(Item[] items) : base(items)
         {
-            this.CurrentItem = CurrentItem;
-            this.StackAmount = CurrentItem != null ? amount : 0;
-        }
-
-        /// <summary>
-        /// Creates an Slot with items
-        /// </summary>
-        /// <param name="currentItems">Items inside the slot (should be copies of first item)</param>
-        public StackSlot(Item[] currentItems)
-        {
-            if(currentItems == null)
-            {
-                this.CurrentItem = null;
-                this.StackAmount = 0;
-            }
-            else
-            {
-                this.CurrentItem = currentItems[0];
-                this.StackAmount = currentItems.Length;
-            }
         }
     }
 }

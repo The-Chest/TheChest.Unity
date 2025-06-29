@@ -1,10 +1,7 @@
 {
-    "name": "TheChest.Unity.UI",
-    "rootNamespace": "TheChest.Unity.UI",
+    "name": "TheChest.Inventories",
+    "rootNamespace": "TheChest.Inventories",
     "references": [
-        "UnityEngine.UI",
-        "TheChest.Unity.Examples",
-        "TheChest.Inventories",
         "TheChest.Core"
     ],
     "includePlatforms": [],
@@ -15,5 +12,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": true
 }

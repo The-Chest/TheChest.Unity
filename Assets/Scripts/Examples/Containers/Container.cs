@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
-using TheChest.Containers.Generics.Base;
-using TheChest.Slots.Generics.Interfaces;
 using TheChest.Examples.Items;
+using TheChest.Core.Containers;
+using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Examples.Containers
 {
-    public class Container : BaseContainer<Item>
+    public class Container : Container<Item>
     {
         [SerializeField]
         protected StackSlot[] slots;
 
-        public override ISlot<Item>[] Slots 
-        { 
-            get => slots; 
-            protected set => slots = value as StackSlot[]; 
+        public Container(ISlot<Item>[] slots) : base(slots)
+        {
         }
     }
 }

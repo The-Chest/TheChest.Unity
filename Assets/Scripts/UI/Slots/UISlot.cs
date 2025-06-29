@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TheChest.Examples.Containers;
 using TheChest.Examples.Items;
+using System.Linq;
 
 namespace TheChest.Slots.UI
 {
@@ -48,7 +49,7 @@ namespace TheChest.Slots.UI
             this.Amount = slot.StackAmount;
             this.slot = slot;
 
-            this.SetItem(slot.CurrentItem);
+            this.SetItem(slot.Content.FirstOrDefault());
         }
 
         public void Refresh(StackSlot slot, bool selected = false)
@@ -56,7 +57,7 @@ namespace TheChest.Slots.UI
             this.Amount = slot.StackAmount;
             this.slot = slot;
 
-            this.SetItem(slot.CurrentItem);
+            this.SetItem(slot.Content.FirstOrDefault());
             this.ChangeSelected(selected);
         }
         #endregion

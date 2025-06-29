@@ -5,6 +5,7 @@ using TheChest.Examples.Containers;
 using TheChest.Containers.UI.Components;
 using TheChest.Slots.UI;
 using TheChest.Examples.Items;
+using System.Linq;
 
 namespace TheChest.Containers.UI
 {
@@ -61,7 +62,8 @@ namespace TheChest.Containers.UI
         #region Interface methods
         public bool Add(Item item,int amount = 1)
         {
-            var res = this.inventory.AddItem(item, amount);
+            var items = Enumerable.Repeat(item, amount).ToArray();
+            var res = this.inventory.Add(items);
             this.Refresh();
             return res.Length == 0;
         }
@@ -69,6 +71,7 @@ namespace TheChest.Containers.UI
         public void Generate()
         {
             this.Clear();
+            this.inventory = new Inventory(this.inventory.Slots, "Default Inventory");// Workaround for Unity serialization issue with Inventory class
             if (this.containerName != null)
                 this.containerName.text = this.inventory?.ContainerName;
 
@@ -78,7 +81,7 @@ namespace TheChest.Containers.UI
                 {
                     var slot = this.inventory.Slots[i];
                     UISlot uiSlot = Instantiate(this.slotPrefab, this.slotContainer.transform);
-                    uiSlot.SetSlot((StackSlot)slot, i);
+                    uiSlot.SetSlot(slot, i);
                     uiSlot.OnSelectIndex += this.SelectItem;
                 }
             }
@@ -86,7 +89,7 @@ namespace TheChest.Containers.UI
 
         public void Drop() 
         {
-            var item = this.inventory.GetItem(this.SelectedIndex);
+            var item = this.inventory.Get(this.SelectedIndex);
 
             /*
             var items = this.inventory.GetAll(this.SelectedIndex);
@@ -123,7 +126,7 @@ namespace TheChest.Containers.UI
             {
                 if(SelectedIndex != -1)
                 {
-                    this.inventory.MoveItem(SelectedIndex, index);
+                    this.inventory.Move(SelectedIndex, index);
                     this.SelectedIndex = -1;
                     this.SelectedAmount = 0;
                 }

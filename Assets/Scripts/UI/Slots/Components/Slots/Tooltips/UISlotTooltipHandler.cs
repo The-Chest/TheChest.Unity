@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using TheChest.Slots.UI.Components.Tooltips;
+using System.Linq;
 
 namespace TheChest.Slots.UI.Components.Slots.Tooltips
 {
@@ -43,7 +44,7 @@ namespace TheChest.Slots.UI.Components.Slots.Tooltips
                 }
 
                 tooltip.gameObject.SetActive(true);
-                tooltip.ShowItem(this.slot.Slot.CurrentItem);
+                tooltip.ShowItem(this.slot.Slot.Content.FirstOrDefault());
             }
         }
 
