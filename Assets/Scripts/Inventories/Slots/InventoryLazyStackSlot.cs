@@ -193,10 +193,5 @@ namespace TheChest.Inventories.Slots
         {
             return this.GetContent(this.stackAmount);
         }
-
-        public bool Contains(T[] items)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
