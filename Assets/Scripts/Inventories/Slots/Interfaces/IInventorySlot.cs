@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Core.Slots.Interfaces;
+﻿using TheChest.Core.Slots.Interfaces;
 
 namespace TheChest.Inventories.Slots.Interfaces
 {
@@ -28,13 +27,5 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// </summary>
         /// <returns>Returns an item of the slot, if <see cref="ISlot{T}.IsEmpty"/> is true, then returns null</returns>
         T Get();
-
-        /// <summary>
-        /// Checks if <paramref name="item"/> is the same that <see cref="ISlot{T}.Content"/>
-        /// </summary>
-        /// <param name="item">The item to be checked</param>
-        /// <returns>Returns true if the item is equal to the Content</returns>
-        [Obsolete("This method will be moved to ISlot<T>")]
-        bool Contains(T item);
     }
 }

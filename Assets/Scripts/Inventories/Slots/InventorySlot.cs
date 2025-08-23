@@ -13,8 +13,12 @@ namespace TheChest.Inventories.Slots
         /// Creates a basic inventory slot with an item
         /// </summary>
         /// <param name="currentItem">item that belongs to this slot</param>
-        public InventorySlot(T currentItem = default) : base(currentItem) { }
+        public InventorySlot(T currentItem = default!) : base(currentItem) 
+        { 
+            this.content = currentItem;
+        }
 
+        /// <inheritdoc />
         public virtual bool Add(T item)
         {
             if (this.IsFull)
@@ -22,30 +26,21 @@ namespace TheChest.Inventories.Slots
                 return false;
             }
 
-            this.Content = item;
+            this.content = item;
             return true;
         }
-
-        public virtual bool Contains(T item)
-        {
-            if(this.IsEmpty) { 
-                return false;
-            }
-
-            return this.Content!.Equals(item);
-        }
-
+        /// <inheritdoc />
         public virtual T Get()
         {
-            var content = this.Content;
-            this.Content = default;
+            var content = this.content;
+            this.content = default;
             return content;    
         }
-
+        /// <inheritdoc />
         public virtual T Replace(T item)
         {
-            var content = this.Content;
-            this.Content = item;
+            var content = this.content;
+            this.content = item;
             return content;
         }
     }
