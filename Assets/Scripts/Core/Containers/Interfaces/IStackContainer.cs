@@ -6,7 +6,7 @@ namespace TheChest.Core.Containers.Interfaces
     /// Interface with the basics of a container with <see cref="IStackSlot{T}"/> features
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
-    public interface IStackContainer<T>
+    public interface IStackContainer<in T>
     {
         /// <summary>
         /// Gets an item from <see cref="IStackSlot{T}"/>
@@ -14,11 +14,6 @@ namespace TheChest.Core.Containers.Interfaces
         /// <param name="index">Index of a slot<para>It needs to be smaller than <see cref="IStackContainer{T}.Size"/></para></param>
         /// <returns>An item from <see cref="IStackSlot{T}"/></returns>
         IStackSlot<T> this[int index] { get; }
-
-        /// <summary>
-        /// Slots in the Container
-        /// </summary>
-        IStackSlot<T>[] Slots { get; }
 
         /// <summary>
         /// Size of the current Container

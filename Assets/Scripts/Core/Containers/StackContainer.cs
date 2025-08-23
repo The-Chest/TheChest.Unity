@@ -11,15 +11,22 @@ namespace TheChest.Core.Containers
     /// <typeparam name="T">An item type</typeparam>
     public class StackContainer<T> : IStackContainer<T>
     {
-        public virtual IStackSlot<T>[] Slots { get; protected set; }
+        /// <summary>
+        /// Slots in the Container
+        /// </summary>
+        protected readonly IStackSlot<T>[] slots;
 
-        public virtual IStackSlot<T> this[int index] => Slots[index];
+        /// <inheritdoc/>
+        public virtual IStackSlot<T> this[int index] => this.slots[index];
 
-        public virtual bool IsFull => Slots.All(x => x.IsFull);
+        /// <inheritdoc/>
+        public virtual bool IsFull => this.slots.All(x => x.IsFull);
 
-        public virtual bool IsEmpty => Slots.All(x => x.IsEmpty);
+        /// <inheritdoc/>
+        public virtual bool IsEmpty => this.slots.All(x => x.IsEmpty);
 
-        public int Size => Slots.Length;
+        /// <inheritdoc/>
+        public virtual int Size => this.slots.Length;
 
         /// <summary>
         /// Creates a Container with <see cref="IStackSlot{T}"/> implementation
@@ -28,7 +35,7 @@ namespace TheChest.Core.Containers
         /// <exception cref="ArgumentNullException"></exception>
         public StackContainer(IStackSlot<T>[] slots)
         {
-            Slots = slots ?? throw new ArgumentNullException(nameof(slots));
+            this.slots = slots ?? throw new ArgumentNullException(nameof(slots));
         }
     }
 }

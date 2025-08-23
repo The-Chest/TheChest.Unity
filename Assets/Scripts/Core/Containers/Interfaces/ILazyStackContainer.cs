@@ -3,31 +3,28 @@
 namespace TheChest.Core.Containers.Interfaces
 {
     /// <summary>
-    /// Interface with the basics of a container
+    /// 
     /// </summary>
-    /// <typeparam name="T">An item type</typeparam>
-    public interface IContainer<in T>
+    /// <typeparam name="T"></typeparam>
+    public interface ILazyStackContainer<in T>
     {
         /// <summary>
         /// Size of the current Container
         /// </summary>
         int Size { get; }
-
         /// <summary>
         /// Verify if the container is full
         /// </summary>
         bool IsFull { get; }
-
         /// <summary>
         /// Verify if the container is empty
         /// </summary>
         bool IsEmpty { get; }
-
         /// <summary>
-        /// Gets an <see cref="ISlot{T}"/> from the Container
+        /// Gets an item from <see cref="ILazyStackSlot{T}"/>
         /// </summary>
-        /// <param name="index">Index of a slot</param>
-        /// <returns>An <see cref="ISlot{T}"/> from inside the container</returns>
-        ISlot<T> this[int index] { get; }
+        /// <param name="index">Index of a slot<para>It needs to be smaller than <see cref="ILazyStackContainer{T}.Size"/></para></param>
+        /// <returns>An item from <see cref="ILazyStackSlot{T}"/></returns>
+        ILazyStackSlot<T> this[int index] { get; }
     }
 }

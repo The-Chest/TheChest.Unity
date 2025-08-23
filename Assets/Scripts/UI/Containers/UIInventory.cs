@@ -14,7 +14,7 @@ namespace TheChest.Containers.UI
     {
         [Header("Inventory data")]
         [Tooltip("Inventory class to store items data")]
-        [SerializeField]protected Inventory inventory;
+        [SerializeField] protected Inventory inventory;
 
         #region UI Components
         [Header("UI Components")]
@@ -145,8 +145,7 @@ namespace TheChest.Containers.UI
             for (int i = 0; i < slotContainer.transform.childCount; i++)
             {
                 var container = slotContainer.transform.GetChild(i).GetComponent<UISlot>();
-                var slot = (StackSlot)this.inventory.Slots[i];
-                container.Refresh(slot,i == SelectedIndex);
+                container.Refresh(this.inventory.Slots[i], i == SelectedIndex);
             }
         }
 

@@ -1,10 +1,10 @@
 ﻿namespace TheChest.Core.Slots.Interfaces
 {
     /// <summary>
-    /// Generic Container Slot with item stack
+    /// Generic Container Slot with item stack that supports lazy checking
     /// </summary>
-    /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public interface IStackSlot<in T> : ISlot<T>
+    /// <typeparam name="T"></typeparam>
+    public interface ILazyStackSlot<in T> : ISlot<T>
     {
         /// <summary>
         /// Defines the amount of items this slot is holding
@@ -17,10 +17,11 @@
         int MaxStackAmount { get; }
 
         /// <summary>
-        /// Checks if the slot contains the specified items.
+        /// Checks if the slot contains the specified item with a specific amount.
         /// </summary>
-        /// <param name="items">items to be checked inside the slot</param>
-        /// <returns>true if the slot contains all <paramref name="items"/></returns>
-        bool Contains(T[] items);
+        /// <param name="item">Item to be checked</param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        bool Contains(T item, int amount);
     }
 }

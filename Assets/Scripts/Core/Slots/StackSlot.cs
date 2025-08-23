@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Slots.Interfaces;
 
@@ -14,18 +15,18 @@ namespace TheChest.Core.Slots
         private const string MAXAMOUNT_SMALLER_THAN_ZERO = "The max amount property cannot be smaller than zero";
         private const string AMOUNT_BIGGER_THAN_MAXAMOUNT = "The item amount cannot be bigger than max amount";
 
-        protected readonly T[] content;
-        public virtual T[] Content
-        {
-            get
-            {
-                return this.content.Where(x => x != null).ToArray();
-            }
-        }
-
-        public virtual int StackAmount => this.content.Count(x => x != null);
-
+        /// <summary>
+        /// The content inside the slot
+        /// </summary>
+        protected T[] content;
+        /// <summary>
+        /// The maximum amount of items that this slot can hold
+        /// </summary>
         protected int maxStackAmount;
+
+        /// <inheritdoc/>
+        public virtual int StackAmount => this.content.Count(x => !EqualityComparer<T>.Default.Equals(x, default!));
+        /// <inheritdoc/>
         public virtual int MaxStackAmount
         {
             get
@@ -44,8 +45,9 @@ namespace TheChest.Core.Slots
             }
         }
 
+        /// <inheritdoc/>
         public virtual bool IsFull => this.StackAmount == maxStackAmount;
-
+        /// <inheritdoc/>
         public virtual bool IsEmpty => this.StackAmount == 0;
 
         /// <summary>
@@ -80,6 +82,38 @@ namespace TheChest.Core.Slots
             Array.Resize(ref items, maxStackAmount);
             this.content = items;
             this.maxStackAmount = maxStackAmount;
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        public bool Contains(T item)
+        {
+            item = item ?? throw new ArgumentNullException(nameof(item));
+
+            if (this.IsEmpty)
+                return false;
+
+            return this.content.Contains(item);
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> contain any null value</exception>
+        public bool Contains(T[] items)
+        {
+            if(items.Length == 0 || this.IsEmpty)
+                return false;
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                var item = items[i];
+                if (EqualityComparer<T>.Default.Equals(item, default!))
+                    throw new ArgumentNullException(nameof(items), "Items cannot contain null values");
+
+                if (!this.content.Contains(item))
+                    return false;
+            }
+
+            return true;
         }
     }
 }
