@@ -19,13 +19,23 @@ namespace TheChest.Core.Slots
         /// The content inside the slot
         /// </summary>
         protected T[] content;
+        protected int stackAmount;
+        /// <inheritdoc/>
+        public virtual int StackAmount 
+        {
+            get {
+                return stackAmount;
+            } 
+            protected set 
+            { 
+                this.stackAmount = value;
+            }
+        }
+
         /// <summary>
         /// The maximum amount of items that this slot can hold
         /// </summary>
         protected int maxStackAmount;
-
-        /// <inheritdoc/>
-        public virtual int StackAmount => this.content.Count(x => !EqualityComparer<T>.Default.Equals(x, default!));
         /// <inheritdoc/>
         public virtual int MaxStackAmount
         {
@@ -46,7 +56,7 @@ namespace TheChest.Core.Slots
         }
 
         /// <inheritdoc/>
-        public virtual bool IsFull => this.StackAmount == maxStackAmount;
+        public virtual bool IsFull => this.StackAmount == this.MaxStackAmount;
         /// <inheritdoc/>
         public virtual bool IsEmpty => this.StackAmount == 0;
 
@@ -60,6 +70,7 @@ namespace TheChest.Core.Slots
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
+            this.stackAmount = this.content.Count(x => !EqualityComparer<T>.Default.Equals(x, default!));
             this.maxStackAmount = items.Length;
             this.content = items;
         }
@@ -80,8 +91,9 @@ namespace TheChest.Core.Slots
                 throw new ArgumentOutOfRangeException(nameof(items), ITEMAMOUNT_BIGGER_THAN_MAXAMOUNT);
 
             Array.Resize(ref items, maxStackAmount);
-            this.content = items;
+            this.stackAmount = this.content.Count(x => !EqualityComparer<T>.Default.Equals(x, default!));
             this.maxStackAmount = maxStackAmount;
+            this.content = items;
         }
 
         /// <inheritdoc/>
