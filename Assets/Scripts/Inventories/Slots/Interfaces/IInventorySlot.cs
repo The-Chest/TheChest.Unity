@@ -18,8 +18,8 @@ namespace TheChest.Inventories.Slots.Interfaces
         /// <summary>
         /// Replaces the content of slot to item
         /// </summary>
-        /// <param name="item">Item to replace <see cref="ISlot{T}.Content"/></param>
-        /// <returns>Old value of <see cref="ISlot{T}.Content"/></returns>
+        /// <param name="item">Item to replace</param>
+        /// <returns>Old value of the slot</returns>
         T Replace(T item);
 
         /// <summary>

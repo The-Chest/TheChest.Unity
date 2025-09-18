@@ -359,7 +359,7 @@ namespace TheChest.Inventories.Containers
                 var slot = this.slots[i];
                 if (slot.Contains(item))
                 {
-                    count += slot.StackAmount;
+                    count += slot.Amount;
                 }
             }
             return count;

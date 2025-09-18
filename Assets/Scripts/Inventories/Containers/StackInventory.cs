@@ -121,7 +121,12 @@ namespace TheChest.Inventories.Containers
                 }
 
                 var notAddedItems = slot.Add(items);
-                events.Add(new StackInventoryAddItemEventData<T>(items.Skip(notAddedItems.Length).ToArray(), index));
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Skip(notAddedItems.Length).ToArray(),
+                        index
+                    )
+                );
                 items = notAddedItems;
                 if (items.Length == 0)
                     break;
@@ -133,7 +138,12 @@ namespace TheChest.Inventories.Containers
                     break;
                 var slot = this.slots[index];
                 var notAddedItems = slot.Add(items);
-                events.Add(new StackInventoryAddItemEventData<T>(items.Skip(notAddedItems.Length).ToArray(), index));
+                events.Add(
+                    new StackInventoryAddItemEventData<T>(
+                        items.Skip(notAddedItems.Length).ToArray(),
+                        index
+                    )
+                );
                 items = notAddedItems;
             }
 
@@ -421,7 +431,7 @@ namespace TheChest.Inventories.Containers
             {
                 if (this.slots[i].Contains(item))
                 {
-                    amount += this.slots[i].StackAmount;
+                    amount += this.slots[i].Amount;
                 }
             }
             return amount;

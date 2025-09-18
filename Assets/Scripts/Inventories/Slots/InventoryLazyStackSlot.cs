@@ -18,11 +18,11 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         public override bool IsFull => 
             !EqualityComparer<T>.Default.Equals(this.content, default!) && 
-            this.StackAmount == this.MaxStackAmount;
+            this.Amount == this.MaxAmount;
         /// <inheritdoc/>
         public override bool IsEmpty => 
             this.content is null || 
-            this.StackAmount == 0;
+            this.Amount == 0;
 
         /// <summary>
         /// Creates an Inventory Stackable Slot with lazy behavior
@@ -41,7 +41,7 @@ namespace TheChest.Inventories.Slots
         protected void Clear()
         {
             this.content = default!;
-            this.StackAmount = 0;
+            this.Amount = 0;
         }
         /// <summary>
         /// Gets the content of the slot as an array with the amount of items inside the slot
@@ -52,25 +52,25 @@ namespace TheChest.Inventories.Slots
         {
             if (this.IsEmpty)
                 return Array.Empty<T>();
-            if (this.StackAmount <= amount)
+            if (this.Amount <= amount)
             {
-                var items = Enumerable.Repeat(this.content, this.stackAmount).ToArray();
+                var items = Enumerable.Repeat(this.content, this.Amount).ToArray();
                 this.Clear();
                 return items;
             }
-            this.SetContent(this.content, this.StackAmount - amount);
+            this.SetContent(this.content, this.Amount - amount);
 
             return Enumerable.Repeat(this.content!, amount).ToArray();
         }
         /// <summary>
-        /// Sets the values of content and <see cref="StackSlot{T}.StackAmount"/>
+        /// Sets the values of content and <see cref="StackSlot{T}.Amount"/>
         /// </summary>
         /// <param name="item">The value to be set to content</param>
-        /// <param name="amount">The value to be set to <see cref="StackSlot{T}.StackAmount"/></param>
+        /// <param name="amount">The value to be set to <see cref="StackSlot{T}.Amount"/></param>
         protected void SetContent(T item, int amount)
         {
             this.content = item;
-            this.StackAmount = amount;
+            this.Amount = amount;
         }
 
         /// <summary>
@@ -85,14 +85,14 @@ namespace TheChest.Inventories.Slots
         private int AddItems(T item, int amount = 1)
         {
             var leftAmount = 0;
-            if (this.StackAmount + amount > this.MaxStackAmount)
+            if (this.Amount + amount > this.MaxAmount)
             {
-                leftAmount = this.StackAmount + amount - this.MaxStackAmount;
-                this.SetContent(item, this.MaxStackAmount);
+                leftAmount = this.Amount + amount - this.MaxAmount;
+                this.SetContent(item, this.MaxAmount);
             }
             else
             {
-                this.SetContent(item, this.StackAmount + amount);
+                this.SetContent(item, this.Amount + amount);
             }
 
             return leftAmount;
@@ -138,13 +138,13 @@ namespace TheChest.Inventories.Slots
         }
 
         /// <inheritdoc/>
-        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxStackAmount"/></returns>
+        /// <returns>true if <paramref name="item"/> is not null and <paramref name="amount"/> is bigger than zero and smaller than <see cref="LazyStackSlot{T}.MaxAmount"/></returns>
         public virtual bool CanReplace(T item, int amount = 1)
         {
             if (item is null)
                 return false;
 
-            if (amount <= 0 || amount > this.MaxStackAmount)
+            if (amount <= 0 || amount > this.MaxAmount)
                 return false;
 
             return true;
@@ -155,12 +155,12 @@ namespace TheChest.Inventories.Slots
         /// If the slot is Empty, it'll try to add the max possible amount of items and returning the amount left
         /// </remarks>
         /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxStackAmount"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is smaller than zero or bigger than <see cref="LazyStackSlot{T}.MaxAmount"/></exception>
         public virtual T[] Replace(T item, int amount = 1)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
-            if (amount <= 0 || amount > this.MaxStackAmount)
+            if (amount <= 0 || amount > this.MaxAmount)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
             if (this.IsEmpty)
@@ -169,7 +169,7 @@ namespace TheChest.Inventories.Slots
                 return Enumerable.Repeat(item, left).ToArray();
             }
 
-            var slotItems = this.GetContent(this.stackAmount);
+            var slotItems = this.GetContent(this.Amount);
             this.SetContent(item,amount);
             return slotItems;
         }
@@ -191,7 +191,7 @@ namespace TheChest.Inventories.Slots
         /// <inheritdoc/>
         public virtual T[] GetAll()
         {
-            return this.GetContent(this.stackAmount);
+            return this.GetContent(this.Amount);
         }
     }
 }
