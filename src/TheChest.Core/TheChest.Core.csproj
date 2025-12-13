@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup Label="Package">
+		<Title>The Chest Core</Title>
+		<Description>Provides generic collections to container management systems.</Description>
+		<Authors>The Chest</Authors>
+		<RepositoryUrl>https://github.com/The-Chest/TheChest.Core</RepositoryUrl>
+		<PackageProjectUrl>https://www.nuget.org/packages/TheChest.Core/</PackageProjectUrl>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	  	<IncludeSymbols>True</IncludeSymbols>
+	</PropertyGroup>
+	
+	<PropertyGroup Label="Compiler">
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<DebugType>embedded</DebugType>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+	</PropertyGroup>
+		
+	<ItemGroup Label="Package">
+	  <None Include="..\..\readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>	
+</Project>
