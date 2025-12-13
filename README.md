@@ -10,3 +10,7 @@ git subtree add --prefix=Scripts/Core https://github.com/The-Chest/TheChest.Core
 ```bash
 git subtree add --prefix=Scripts/Inventories https://github.com/The-Chest/TheChest.Inventories {version} --squash
 ```
+
+## Requirements 
+TheChest.Core >= v0.8.0
+TheChest.Inventories >= v0.8.0
