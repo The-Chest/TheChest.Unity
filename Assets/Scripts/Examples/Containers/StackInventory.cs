@@ -9,8 +9,6 @@ namespace TheChest.Examples.Containers
         [SerializeField]
         protected new StackSlot[] slots;
 
-        public StackInventory(StackSlot[] slots) : base(slots)
-        {
-        }
+        public StackInventory(StackSlot[] slots) : base(slots) { }
     }
 }

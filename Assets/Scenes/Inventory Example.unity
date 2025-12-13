@@ -239,15 +239,119 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[0].itemAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
       propertyPath: inventory.slots.Array.data[0].stackAmount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[0].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[1].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[2].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[3].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[4].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[5].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[6].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[7].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[8].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[9].maxItemAmount
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
       propertyPath: inventory.slots.Array.data[0].maxStackAmount
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[10].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[11].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[12].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[13].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[14].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[15].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[16].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[17].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[18].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[19].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
       propertyPath: inventory.slots.Array.data[1].maxStackAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[20].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[21].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[22].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[23].maxItemAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[24].maxItemAmount
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
@@ -361,6 +465,10 @@ PrefabInstance:
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
       propertyPath: inventory.slots.Array.data[29].maxStackAmount
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
+      propertyPath: inventory.slots.Array.data[0].items.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4923292756953033600, guid: 0c6287291d1c39143966d1324c1c90d7, type: 3}
       propertyPath: inventory.slots.Array.data[0].content.Array.size

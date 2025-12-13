@@ -89,26 +89,22 @@ namespace TheChest.Containers.UI
 
         public void Drop() 
         {
-            var item = this.inventory.Get(this.SelectedIndex);
-
-            /*
             var items = this.inventory.GetAll(this.SelectedIndex);
-             * if(items.Length == 0) {
+            if(items.Length == 0) {
                 this.SelectedIndex = -1;
                 this.SelectedAmount = 0;
                 return;
             }
 
             var item = items[0];
-            */
 
             var screenPoint = Input.mousePosition;
             screenPoint.z = 10.0f;
 
             var obj = Instantiate(worldItem, Camera.main.ScreenToWorldPoint(screenPoint),Quaternion.identity);
 
-            obj.GetComponent<WorldItem>().Item = item;
-            obj.GetComponent<WorldItem>().Amount = 1;
+            obj.Item = item;
+            obj.Amount = items.Length;
 
             this.SelectedIndex = -1;
             this.SelectedAmount = 0;

@@ -19,9 +19,7 @@ public class WorldItem : MonoBehaviour
         get => amount;
         set {
             if (value <= 0)
-            {
                 value = 1;
-            }
             this.amount = value;
         }
     }
