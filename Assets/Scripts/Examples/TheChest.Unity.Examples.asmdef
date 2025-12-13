@@ -1,0 +1,17 @@
+{
+    "name": "TheChest.Unity.Examples",
+    "rootNamespace": "TheChest.Unity.Examples",
+    "references": [
+        "TheChest.Inventories",
+        "TheChest.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,73 +1,92 @@
-﻿using UnityEngine;
-using TheChest.Slots.Generics.Base;
+﻿using System;
+using UnityEngine;
 using TheChest.Examples.Items;
+using TheChest.Inventories.Slots;
+using System.Linq;
 
 namespace TheChest.Examples.Containers
 {
     /// <summary>
     /// Slot with stackable items and serializable Fields
     /// </summary>
-    [System.Serializable]
-    public class StackSlot : BaseInventoryStackSlot<Item>
+    [Serializable]
+    public class StackSlot : InventoryStackSlot<Item>, ISerializationCallbackReceiver
     {
-        #region properties
         /// <summary>
-        /// Current item inside the slot
+        /// Current items inside the slot
         /// </summary>
         [SerializeField]
-        private Item item;
+        protected Item[] items;
+        /// <summary>
+        /// Current items inside the slot
+        /// </summary>
+        [Obsolete("This will be removed. Use event behavior to track down inventory changes")]
+        public virtual Item[] Content => this.content;
 
-        public override Item CurrentItem {
-            get {
-                return this.item;
-            }
-            protected set {
-                this.item = value;
-            }
-        }
-
+        /// <summary>
+        /// Current stack amount of the slot.
+        /// </summary>
         [SerializeField]
-        private int stackAmount;
+        protected int itemAmount;
 
-        public override int StackAmount {
-            get {
-                return this.stackAmount;
+        /// <summary>
+        /// Max stack amount of the slot.
+        /// </summary>
+        [SerializeField]
+        protected int maxItemAmount;
+        /// <summary>
+        /// Max stack amount of the slot. 
+        /// </summary>
+        /// <remarks>If empty, returns the default max stack amount, else returns the max stack of the first item in the slot</remarks>
+        /// <remarks>This property for now has some extra logic that will be removed soon</remarks>
+        public override int MaxAmount
+        {
+            get
+            {
+                if(this.IsEmpty)
+                    return this.maxAmount;
+
+                return this.content.First(x => !(x is null)).MaxStack;
             }
-            protected set {
-                this.stackAmount = value;
+            protected set
+            {
+                this.maxAmount = value;
             }
         }
 
-        public override int MaxStackAmount => this.CurrentItem?.MaxStack??1;
-        #endregion
+        public StackSlot(Item[] items, int maxStackAmount) : base(items, maxStackAmount) { }
 
-        /// <summary>
-        /// Creates an Slot with an Item
-        /// </summary>
-        /// <param name="CurrentItem">Item inside the slot (can be null)</param>
-        /// <param name="amount">Amount of <paramref name="CurrentItem"/> (0 if item is null)</param>
-        public StackSlot(Item CurrentItem = null,int amount = 1) 
+        protected override void AddItem(ref Item item)
         {
-            this.CurrentItem = CurrentItem;
-            this.StackAmount = CurrentItem != null ? amount : 0;
+            if(this.content.Length + 1 <= this.maxAmount)
+                Array.Resize(ref this.content, this.content.Length + 1);
+            base.AddItem(ref item);
         }
 
-        /// <summary>
-        /// Creates an Slot with items
-        /// </summary>
-        /// <param name="currentItems">Items inside the slot (should be copies of first item)</param>
-        public StackSlot(Item[] currentItems)
+        protected override void AddItems(ref Item[] items)
         {
-            if(currentItems == null)
-            {
-                this.CurrentItem = null;
-                this.StackAmount = 0;
-            }
-            else
-            {
-                this.CurrentItem = currentItems[0];
-                this.StackAmount = currentItems.Length;
-            }
+            var newAmount = this.content.Length + items.Length;
+
+            if(newAmount > this.maxAmount)
+                Array.Resize(ref this.content, this.maxAmount);
+            else if (newAmount <= this.maxAmount)
+                Array.Resize(ref this.content, newAmount);
+
+            base.AddItems(ref items);
+        }
+
+        public virtual void OnBeforeSerialize()
+        {
+            this.items = this.content;
+            this.itemAmount = this.Amount; 
+            this.maxItemAmount = this.MaxAmount;
+        }
+
+        public virtual void OnAfterDeserialize()
+        {
+            this.content = this.items;
+            this.amount = this.itemAmount;
+            this.maxAmount = this.maxItemAmount;
         }
     }
 }

@@ -70,15 +70,12 @@ namespace TheChest.Examples.Items
 
         public override bool Equals(object obj)
         {
-            return obj != null && obj is Item item &&
+            if(obj == null || GetType() != obj.GetType())
+                return false;
+            return obj is Item item &&
                    ID == item.ID &&
                    Name == item.Name &&
                    MaxStack == item.MaxStack;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
     }
 }
