@@ -39,18 +39,18 @@ namespace TheChest.Examples.Containers
         /// </summary>
         /// <remarks>If empty, returns the default max stack amount, else returns the max stack of the first item in the slot</remarks>
         /// <remarks>This property for now has some extra logic that will be removed soon</remarks>
-        public override int MaxAmount
+        public override int MaxStackAmount
         {
             get
             {
                 if(this.IsEmpty)
-                    return this.maxAmount;
+                    return this.maxStackAmount;
 
                 return this.content.First(x => !(x is null)).MaxStack;
             }
             protected set
             {
-                this.maxAmount = value;
+                this.maxStackAmount = value;
             }
         }
 
@@ -58,7 +58,7 @@ namespace TheChest.Examples.Containers
 
         protected override void AddItem(ref Item item)
         {
-            if(this.content.Length + 1 <= this.maxAmount)
+            if(this.content.Length + 1 <= this.maxStackAmount)
                 Array.Resize(ref this.content, this.content.Length + 1);
             base.AddItem(ref item);
         }
@@ -67,9 +67,9 @@ namespace TheChest.Examples.Containers
         {
             var newAmount = this.content.Length + items.Length;
 
-            if(newAmount > this.maxAmount)
-                Array.Resize(ref this.content, this.maxAmount);
-            else if (newAmount <= this.maxAmount)
+            if(newAmount > this.maxStackAmount)
+                Array.Resize(ref this.content, this.maxStackAmount);
+            else if (newAmount <= this.maxStackAmount)
                 Array.Resize(ref this.content, newAmount);
 
             base.AddItems(ref items);
@@ -78,15 +78,15 @@ namespace TheChest.Examples.Containers
         public virtual void OnBeforeSerialize()
         {
             this.items = this.content;
-            this.itemAmount = this.Amount; 
-            this.maxItemAmount = this.MaxAmount;
+            this.itemAmount = this.StackAmount; 
+            this.maxItemAmount = this.MaxStackAmount;
         }
 
         public virtual void OnAfterDeserialize()
         {
             this.content = this.items;
-            this.amount = this.itemAmount;
-            this.maxAmount = this.maxItemAmount;
+            this.stackAmount = this.itemAmount;
+            this.maxStackAmount = this.maxItemAmount;
         }
     }
 }

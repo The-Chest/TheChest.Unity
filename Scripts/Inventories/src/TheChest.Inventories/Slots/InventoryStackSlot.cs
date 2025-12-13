@@ -48,7 +48,7 @@ namespace TheChest.Inventories.Slots
                     break;
             }
 
-            items = items[addAmount..];
+            items = items.Skip(addAmount).ToArray();
         }
         /// <summary>
         /// Adds an item inside the Content with no previous validation.

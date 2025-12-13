@@ -1,7 +1,7 @@
 # The Chest
 Generic Inventory System from Unity.
 
-> Work In Progress
+> Work In Progress | Not Ready for Production
 
 ## Upgrading dependencies
 ```bash
@@ -13,4 +13,4 @@ git subtree add --prefix=Scripts/Inventories https://github.com/The-Chest/TheChe
 
 ## Requirements 
 TheChest.Core >= v0.8.0
-TheChest.Inventories >= v0.8.0
+TheChest.Inventories >= v0.8.1

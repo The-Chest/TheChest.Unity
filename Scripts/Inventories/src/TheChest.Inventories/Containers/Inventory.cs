@@ -90,7 +90,7 @@ namespace TheChest.Inventories.Containers
                 this.OnAdd?.Invoke(this, (addedItems.Values.ToArray() , addedItems.Keys.ToArray()));
 
             if (addedAmount < items.Length)
-                return items[addedAmount..];
+                return items.Skip(addedAmount).ToArray();
 
             return Array.Empty<T>();
         }
