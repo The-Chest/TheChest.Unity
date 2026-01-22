@@ -2,7 +2,7 @@
     "name": "TheChest.Inventories",
     "rootNamespace": "TheChest.Inventories",
     "references": [
-        "GUID:e457972e3d53c584d8fff900f242441e"
+        "GUID:167f5ee3937c336428f242bee1271b24"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
