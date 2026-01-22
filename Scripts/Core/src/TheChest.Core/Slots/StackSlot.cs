@@ -18,7 +18,7 @@ namespace TheChest.Core.Slots
         /// <summary>
         /// The content inside the slot
         /// </summary>
-        protected readonly T[] content;
+        protected T[] content;
         /// <inheritdoc/>
         public virtual IReadOnlyCollection<T> Content
         {

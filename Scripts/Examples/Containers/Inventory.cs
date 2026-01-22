@@ -17,7 +17,7 @@ namespace TheChest.Examples.Containers
         [SerializeField]
         protected new StackSlot[] slots;
 
-        public StackSlot[] Slots
+        public new StackSlot[] Slots
         {
             get
             {

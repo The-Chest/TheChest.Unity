@@ -39,7 +39,7 @@ namespace TheChest.Containers.UI
         #region Properties
         public Inventory Inventory{
             get => this.inventory; 
-         }
+        }
 
         public int SelectedIndex { 
             get ;

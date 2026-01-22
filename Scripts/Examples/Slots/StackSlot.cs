@@ -1,8 +1,9 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 using TheChest.Examples.Items;
 using TheChest.Inventories.Slots;
-using System.Linq;
+using UnityEngine;
 
 namespace TheChest.Examples.Containers
 {
@@ -12,6 +13,7 @@ namespace TheChest.Examples.Containers
     [Serializable]
     public class StackSlot : InventoryStackSlot<Item>, ISerializationCallbackReceiver
     {
+        private const int DEFAULT_MAX_STACK = 10;
         /// <summary>
         /// Current items inside the slot
         /// </summary>
@@ -28,7 +30,10 @@ namespace TheChest.Examples.Containers
         /// </summary>
         [SerializeField]
         protected int itemAmount;
-
+        /// <summary>
+        /// Current stack amount of the slot.
+        /// </summary>
+        public override int StackAmount => this.Content?.Count(x => !EqualityComparer<Item>.Default.Equals(x, default!)) ?? 0;
         /// <summary>
         /// Max stack amount of the slot.
         /// </summary>
@@ -46,7 +51,7 @@ namespace TheChest.Examples.Containers
                 if(this.IsEmpty)
                     return this.maxStackAmount;
 
-                return this.content.First(x => !(x is null)).MaxStack;
+                return this.content.FirstOrDefault(x => !(x is null))?.MaxStack ?? DEFAULT_MAX_STACK;
             }
             protected set
             {
@@ -78,14 +83,14 @@ namespace TheChest.Examples.Containers
         public virtual void OnBeforeSerialize()
         {
             this.items = this.content;
-            this.itemAmount = this.StackAmount; 
+            this.itemAmount = this.StackAmount;
             this.maxItemAmount = this.MaxStackAmount;
         }
 
         public virtual void OnAfterDeserialize()
         {
             this.content = this.items;
-            this.stackAmount = this.itemAmount;
+            //this.stackAmount = this.itemAmount;
             this.maxStackAmount = this.maxItemAmount;
         }
     }

@@ -46,18 +46,19 @@ namespace TheChest.Slots.UI
         public void SetSlot(StackSlot slot, int slotIndex)
         {
             this.Index = slotIndex;
-            this.Amount = slot.Amount;
+            this.Amount = slot.StackAmount;
             this.slot = slot;
 
-            this.SetItem(slot.Content.FirstOrDefault());
+            this.SetItem(slot.Content!.FirstOrDefault());
         }
 
         public void Refresh(StackSlot slot, bool selected = false)
         {
-            this.Amount = slot.Amount;
+            this.Amount = slot.StackAmount;
             this.slot = slot;
 
-            this.SetItem(slot.Content.FirstOrDefault());
+            this.SetItem(slot.Content!.FirstOrDefault());
+            
             this.ChangeSelected(selected);
         }
         #endregion
@@ -79,7 +80,7 @@ namespace TheChest.Slots.UI
         {
             if (!slot.IsEmpty && !(item is null))
             {
-                this.itemAmount.text = slot.Amount == 0 ? string.Empty : slot.Amount.ToString();
+                this.itemAmount.text = slot.StackAmount == 0 ? string.Empty : slot.StackAmount.ToString();
                 this.itemSprite.sprite = item.Image;
                 this.itemSprite.color = Color.white;
             }
