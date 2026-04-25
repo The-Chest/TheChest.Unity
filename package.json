@@ -1,0 +1,11 @@
+{
+  "name": "com.thechest.unity",
+  "version": "0.5.0",
+  "displayName": "The Chest",
+  "description": "A inventory system for Unity.",
+  "unity": "2020.3",
+  "author": {
+    "name": "Franklin Bitencourt"
+  },
+  "type": "library"
+}
