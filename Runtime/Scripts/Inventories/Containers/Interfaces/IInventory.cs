@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Inventories.Containers.Events;
+﻿using TheChest.Inventories.Containers.Events;
 
 namespace TheChest.Inventories.Containers.Interfaces
 {
@@ -15,11 +14,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event InventoryGetEventHandler<T>? OnGet;
-        /// <summary>
-        /// Raised when an amount of item is added to an index of the inventory
-        /// </summary>
-        event InventoryAddEventHandler<T>? OnAdd;
+        event InventoryGetEventHandler<T> OnGet;
 
         /// <summary>
         /// Gets an item inside a slot
@@ -28,17 +23,17 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <returns>An item inside of the <paramref name="index"/> Slot</returns>
         T Get(int index);
         /// <summary>
-        /// Search an item from inventory
+        /// Gets an item inside the inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
         /// <returns>First item found that is equal <paramref name="item"/></returns>
         T Get(T item);
         /// <summary>
-        /// Search an amount of items in the inventory
+        /// Gets an amount of items in the inventory
         /// </summary>
         /// <param name="item">Item to be found</param>
         /// <param name="amount">Amount to be returned</param>
-        /// <returns>An array with the <paramref name="amount"/> of items equal to <paramref name="item"/> (or the max it can)</returns>
+        /// <returns>An array with the <paramref name="amount"/> of items equal to <paramref name="item"/></returns>
         T[] Get(T item, int amount);
         /// <summary>
         /// Get all Item of the selected type from all slots
@@ -54,33 +49,76 @@ namespace TheChest.Inventories.Containers.Interfaces
         int GetCount(T item);
 
         /// <summary>
-        /// Adds and array of items in a avaliable slot
+        /// Raised when an amount of item is added to an index
         /// </summary>
-        /// <param name="items">Array of items to be added to any avaliable slot found</param>
-        /// <returns>The items from param that were not possible to add</returns>
-        T[] Add(T[] items);
+        event InventoryAddEventHandler<T> OnAdd;
         /// <summary>
-        /// Adds an item in a avaliable slot 
+        /// Checks if <paramref name="item"/> can be added to any slot.
+        /// </summary>
+        /// <param name="item">The item to evaluate for addition to the inventory.</param>
+        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        bool CanAdd(T item);
+        /// <summary>
+        /// Checks if <paramref name="items"/> can be added to any slot.
+        /// </summary>
+        /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
+        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        bool CanAdd(params T[] items);
+        /// <summary>
+        /// Determines whether the specified item can be added at the given index.
+        /// </summary>
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added. Must be within the valid range of the
+        /// collection.</param>
+        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T item, int index);
+
+        /// <summary>
+        /// <para> Adds an item in a avaliable slot </para>
+        /// <para> This method return will change to void in future versions. </para>
+        /// <para> Use <see cref="CanAdd(T)"/> to check if the item can be added before calling this method.</para>
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if the <paramref name="item"/> could be added</returns>
         bool Add(T item);
         /// <summary>
-        /// Adds an item in a specific slot
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T, int)"/> instead.</para>
+        /// Adds and array of items in a avaliable slot
         /// </summary>
-        /// <param name="item">Item to be added</param>
-        /// <param name="index">Slot where the item will be added</param>
-        /// <param name="replace">Flag that decide if the item on <paramref name="index"/> (if exists) will be replaced</param>
-        /// <returns>The item from param that couldn't be added or the replaced item that were inside the slot</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        T AddAt(T item, int index, bool replace);
+        /// <param name="items">Array of items to be added to any avaliable slot found</param>
+        /// <returns>The items from param that were not possible to add</returns>
+        T[] Add(params T[] items);
         /// <summary>
-        /// Adds an item in a specific slot
+        /// <para>Adds an item in a specific slot </para>
+        /// <para>This method return will change to void in future versions.</para>
+        /// <para>Use <see cref="CanAddAt(T,int)"/> to check if the item can be added before calling this method.</para>
         /// </summary>
         /// <param name="item">Item to be added</param>
         /// <param name="index">Slot where the item will be added</param>
         /// <returns>true if the <paramref name="item"/> could be added to the <paramref name="index"/></returns>
         bool AddAt(T item, int index);
+
+        /// <summary>
+        /// Raised when an item is replaced in a specific slot
+        /// </summary>
+        event InventoryReplaceEventHandler<T> OnReplace;
+        /// <summary>
+        /// Checks if an item can be replaced in a specific slot
+        /// </summary>
+        /// <param name="item">Item to be checked to ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the slot to be checked for replacement</param>
+        /// <returns>true if the <paramref name="item"/> can be replaced in the <paramref name="index"/> slot; otherwise, false.</returns>
+        bool CanReplace(T item, int index);
+        /// <summary>
+        /// Replaces an item in a specific slot
+        /// </summary>
+        /// <param name="item">The item that will now ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the <paramref name="item"/> will ocupy</param>
+        /// <returns>The old item from the slot on <paramref name="index"/></returns>
+        T Replace(T item, int index);
+
+        /// <summary>
+        /// Raised when one item is moved from an index to other on the inventory
+        /// </summary>
+        event InventoryMoveEventHandler<T> OnMove;
     }
 }

@@ -46,7 +46,7 @@ namespace TheChest.Slots.UI
         public void SetSlot(StackSlot slot, int slotIndex)
         {
             this.Index = slotIndex;
-            this.Amount = slot.StackAmount;
+            this.Amount = slot.Amount;
             this.slot = slot;
 
             this.SetItem(slot.Content!.FirstOrDefault());
@@ -54,7 +54,7 @@ namespace TheChest.Slots.UI
 
         public void Refresh(StackSlot slot, bool selected = false)
         {
-            this.Amount = slot.StackAmount;
+            this.Amount = slot.Amount;
             this.slot = slot;
 
             this.SetItem(slot.Content!.FirstOrDefault());
@@ -80,7 +80,7 @@ namespace TheChest.Slots.UI
         {
             if (!slot.IsEmpty && !(item is null))
             {
-                this.itemAmount.text = slot.StackAmount == 0 ? string.Empty : slot.StackAmount.ToString();
+                this.itemAmount.text = slot.Amount == 0 ? string.Empty : slot.Amount.ToString();
                 this.itemSprite.sprite = item.Image;
                 this.itemSprite.color = Color.white;
             }

@@ -1,10 +1,10 @@
 ﻿namespace TheChest.Core.Containers.Interfaces
 {
     /// <summary>
-    /// Interface with the basics of a container
+    /// Interface with the basics of a container with lazy stack features
     /// </summary>
     /// <typeparam name="T">An item type</typeparam>
-    public interface IContainer<in T>
+    public interface ILazyStackContainer<in T>
     {
         /// <summary>
         /// Size of the current Container
@@ -18,9 +18,9 @@
         /// Verify if the container is empty
         /// </summary>
         bool IsEmpty { get; }
-        
+
         /// <summary>
-        /// Checks if the container contains an <paramref name="item"/>.
+        /// Checks if the container contains an item.
         /// </summary>
         /// <param name="item">Item to be checked</param>
         /// <returns>Returns true when the container contains an <paramref name="item"/> in any of its slots</returns>

@@ -1,5 +1,4 @@
-﻿using System;
-using TheChest.Core.Containers.Interfaces;
+﻿using TheChest.Core.Containers.Interfaces;
 using TheChest.Inventories.Containers.Events.Stack;
 
 namespace TheChest.Inventories.Containers.Interfaces
@@ -16,15 +15,19 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <summary>
         /// Raised when an amount of item is added to an index of the inventory
         /// </summary>
-        event StackInventoryAddEventHandler<T>? OnAdd;
+        event StackInventoryAddEventHandler<T> OnAdd;
         /// <summary>
         /// Raised when an amount of item is requested from an index of the inventory
         /// </summary>
-        event StackInventoryGetEventHandler<T>? OnGet;
+        event StackInventoryGetEventHandler<T> OnGet;
         /// <summary>
         /// Raised when one item is moved from an index to other on the inventory
         /// </summary>
-        event StackInventoryMoveEventHandler<T>? OnMove;
+        event StackInventoryMoveEventHandler<T> OnMove;
+        /// <summary>
+        /// Raised when an item is removed from an index of the inventory
+        /// </summary>
+        event StackInventoryReplaceEventHandler<T> OnReplace;
 
         #region IStackInventory
         /// <summary>
@@ -37,7 +40,7 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// Search an Item from inventory
         /// </summary>
         /// <param name="item">The item to be searched</param>
-        /// <returns>Returns the first item found or null</returns>
+        /// <returns>Returns the first item found</returns>
         T Get(T item);
         /// <summary>
         /// Search an amount of items in the inventory
@@ -58,18 +61,47 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="item">The item to de counted</param>
         /// <returns>The current amount of the item in the Inventory</returns>
         int GetCount(T item);
+
+        /// <summary>
+        /// Checks if <paramref name="item"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="item">The item to evaluate to add to the inventory.</param>
+        /// <returns>true if the <paramref name="item"/> can be added; otherwise, false.</returns>
+        bool CanAdd(T item);
+        /// <summary>
+        /// Checks if <paramref name="items"/> can be added to any slot on inventory.
+        /// </summary>
+        /// <param name="items">An array of items to evaluate for addition to the inventory.</param>
+        /// <returns>true if ALL <paramref name="items"/> can be added; otherwise, false.</returns>
+        bool CanAdd(params T[] items);
+
         /// <summary>
         /// Adds and array of item in a avaliable slot
         /// </summary>
         /// <param name="items">Array of items to be added to any avaliable slot found</param>
         /// <returns></returns>
-        T[] Add(T[] items);
+        T[] Add(params T[] items);
         /// <summary>
         /// Adds an item in a avaliable slot
         /// </summary>
         /// <param name="item">item to be added</param>
         /// <returns>true if is possible to add <paramref name="item"/></returns>
         bool Add(T item);
+
+        /// <summary>
+        /// Checks if it's possible to replace the items in a specific slot with the given items
+        /// </summary>
+        /// <param name="items">The items that will check to be replaced the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the slot to be checked if can be replaced by <paramref name="items"/></param>
+        /// <returns>True if the <paramref name="items"/> can replace the slot on <paramref name="index"/>; otherwise, false.</returns>
+        bool CanReplace(T[] items, int index);
+        /// <summary>
+        /// Replaces items in a specific slot
+        /// </summary>
+        /// <param name="items">The items that will now ocupy the slot on <paramref name="index"/></param>
+        /// <param name="index">The index of the <paramref name="items"/> will ocupy</param>
+        /// <returns>The old items from the slot on <paramref name="index"/></returns>
+        T[] Replace(T[] items, int index);
         #endregion
 
         #region IInventory
@@ -86,26 +118,22 @@ namespace TheChest.Inventories.Containers.Interfaces
         /// <param name="index">Index of the slot</param>
         /// <returns>An array with of items</returns>
         T[] GetAll(int index);
+
         /// <summary>
-        /// <para>Adds an item in a specific slot</para>
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T, int)"/> instead.</para>
+        /// Determines whether the specified item can be added at the given index.
         /// </summary>
-        /// <param name="item">item to be added</param>
-        /// <param name="index">slot where the item will be added</param>
-        /// <param name="replace"></param>
-        /// <returns>The item that couldn't be added or the replaced item if <paramref name="replace"/> is true</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        T[] AddAt(T item, int index, bool replace);
+        /// <param name="item">The item to evaluate for insertion at the specified index.</param>
+        /// <param name="index">The zero-based index at which to check if the item can be added.</param>
+        /// <returns>true if the item can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T item, int index);
         /// <summary>
-        /// <para>Adds an array of item inside the inventory</para>
-        /// <para>This method will be removed in the future versions. Use <see cref="AddAt(T[], int)"/> instead.</para>
+        /// Determines whether the specified items can be added at the given index.
         /// </summary>
-        /// <param name="items">Array of item of the same type wich will be added to inventory</param>
-        /// <param name="index">Wich slot the items will be added</param>
-        /// <param name="replace">Defines if the current Slot item will be replaced by the <paramref name="items"/> param</param>
-        /// <returns>An array of items replaced or couldn't be added</returns>
-        [Obsolete("This method will be removed in the future versions. Use AddAt(T[] items, int index) instead")]
-        T[] AddAt(T[] items, int index, bool replace);
+        /// <param name="items">The array of items to evaluate for insertion</param>
+        /// <param name="index">The zero-based index at which to check if the items can be added.</param>
+        /// <returns>true if all of the items can be added at the specified index; otherwise, false.</returns>
+        bool CanAddAt(T[] items, int index);
+
         /// <summary>
         /// Adds an item in a specific slot
         /// </summary>
@@ -122,15 +150,22 @@ namespace TheChest.Inventories.Containers.Interfaces
         T[] AddAt(T[] items, int index);
         #endregion
 
-        #region IInteractive
+        #region IInteractiveContainer
         /// <summary>
-        /// Move a item between two slots
+        /// Checks if the specified items can be moved from the origin index to the target index.
+        /// </summary>
+        /// <param name="origin">The zero-based index representing the items current position.</param>
+        /// <param name="target">The zero-based index representing the desired target position.</param>
+        /// <returns>true if the item can be moved to the target index; otherwise, false.</returns>
+        bool CanMove(int origin, int target);
+        /// <summary>
+        /// Moves an item from one index to another in the inventory
         /// </summary>
         /// <param name="origin">Selected item</param>
         /// <param name="target">Where the item will be placed</param>
         void Move(int origin, int target);
         /// <summary>
-        /// Returns every item from the inventory
+        /// Gets every item from inventory
         /// </summary>
         /// <returns>Returns an Array of items</returns>
         T[] Clear();

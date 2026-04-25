@@ -9,8 +9,13 @@ namespace TheChest.Inventories.Slots.Interfaces
     /// This interface is still unstable. Some methods can be moved to a separated interface.
     /// </para>
     /// <typeparam name="T">Item the Slot Accept</typeparam>
-    public interface IInventoryLazyStackSlot<T> : IStackSlot<T>
+    public interface IInventoryLazyStackSlot<T> : ILazyStackSlot<T>
     {
+        /// <summary>
+        /// Gets the current available amount.
+        /// </summary>
+        /// <remarks>This property will be moved to <see cref="ILazyStackSlot{T}"/></remarks>
+        int AvailableAmount { get; }
         /// <summary>
         /// Checks if the slot can add an amount of items
         /// </summary>

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TheChest.Core.Containers;
-using TheChest.Core.Slots.Extensions;
 using TheChest.Inventories.Containers.Events;
 using TheChest.Inventories.Containers.Interfaces;
+using TheChest.Inventories.Extensions;
 using TheChest.Inventories.Slots.Interfaces;
 
 namespace TheChest.Inventories.Containers
@@ -21,11 +21,13 @@ namespace TheChest.Inventories.Containers
         protected new readonly IInventorySlot<T>[] slots;
 
         /// <inheritdoc/>
-        public event InventoryGetEventHandler<T>? OnGet;
+        public event InventoryGetEventHandler<T> OnGet;
         /// <inheritdoc/>
-        public event InventoryAddEventHandler<T>? OnAdd;
+        public event InventoryAddEventHandler<T> OnAdd;
         /// <inheritdoc/>
-        public event InventoryMoveEventHandler<T>? OnMove;
+        public event InventoryMoveEventHandler<T> OnMove;
+        /// <inheritdoc/>
+        public event InventoryReplaceEventHandler<T> OnReplace;
 
         /// <summary>
         /// Creates an Inventory with <see cref="IInventorySlot{T}"/> implementation
@@ -36,18 +38,87 @@ namespace TheChest.Inventories.Containers
             this.slots = slots;
         }
 
-        /// <summary>
-        /// Gets an <see cref="IInventorySlot{T}"/> from the inventory
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public new IInventorySlot<T> this[int index] => this.slots[index];
-        /// <summary>
-        /// Gets an array of <see cref="IInventorySlot{T}"/> from the inventory
-        /// </summary>
-        [Obsolete("This will be removed in the future versions. Use this[int index] instead")]
-        public new IInventorySlot<T>[] Slots => this.slots.ToArray();
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public virtual bool CanAdd(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
 
+            for (int i = 0; i < this.Size; i++)
+            {
+                if (this.slots[i].CanAdd(item))
+                    return true;
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="items"/> is <see langword="null"/> or has one <see langword="null"/> item</exception>
+        public virtual bool CanAdd(params T[] items)
+        {
+            if (items is null)
+                throw new ArgumentNullException(nameof(items));
+
+            if (items.Length == 0)
+                return false;
+            if (items.Length > this.Size)
+                return false;
+
+            //TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+
+            var canAddAmount = 0;
+            for (int i = 0; i < this.Size; i++)
+            {
+                var slot = this.slots[i];
+                var item = items[canAddAmount];
+                if (slot.CanAdd(item))
+                {
+                    canAddAmount++;
+                    if (items.Length == canAddAmount)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanAddAt(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+        
+            return this.slots[index].CanAdd(item);
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        public virtual bool Add(T item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
+            for (int i = 0; i < this.Size ; i ++)
+            {
+                var added = this.slots[i].Add(item);
+                if (added)
+                {
+                    this.OnAdd?.Invoke(this, (item, i)); 
+                    return true;
+                }
+            }
+
+            return false;
+        }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires <see cref="OnAdd"/> event after every possible <paramref name="items"/> is added. 
@@ -60,7 +131,12 @@ namespace TheChest.Inventories.Containers
         {
             if (items.Length == 0) 
                 return items;
-
+            /* 
+            TODO: check if its better to return false instead of throw an exception when one of the items is null
+            if (items.ContainsNull())
+                throw new ArgumentNullException(nameof(items), "One of the items is null");
+            */
+            
             var addedAmount = 0;
             var addedItems = new Dictionary<int, T>();
             var index = 0;
@@ -96,62 +172,11 @@ namespace TheChest.Inventories.Containers
         }
         /// <inheritdoc/>
         /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        public virtual bool Add(T item)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-
-            for (int i = 0; i < this.Size ; i ++)
-            {
-                var added = this.slots[i].Add(item);
-                if (added)
-                {
-                    this.OnAdd?.Invoke(this, (item, i)); 
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
         /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        [Obsolete("This will be removed in the future versions. Use AddAt(T item, int index) instead")]
-        public virtual T AddAt(T item, int index, bool replace)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item));
-            if (index < 0 || index >= this.Size)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            T result = default;
-            if (replace)
-            {
-                result = this.slots[index].Replace(item);
-                this.OnAdd?.Invoke(this, (item, index));//TODO: change it to OnReplace when <see href="https://github.com/The-Chest/TheChest.Inventories/issues/75"/> is implemented
-            }
-            else
-            {
-                var added = this.AddAt(item, index);
-                if (!added)
-                    result = item;
-            }
-
-            return result;
-        }
-        /// <inheritdoc/>
-        /// <remarks>
-        /// The method fires <see cref="OnAdd"/> event when <paramref name="item"/> is added on <paramref name="index"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
-        public bool AddAt(T item, int index)
+        public virtual bool AddAt(T item, int index)
         {
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
@@ -164,6 +189,7 @@ namespace TheChest.Inventories.Containers
 
             return added;
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event with every item returned from it.
@@ -187,11 +213,12 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when any amount of <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T[] GetAll(T item)
         {
             if(item is null)
@@ -213,6 +240,7 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event if an item is found on <paramref name="index"/>.
@@ -234,7 +262,7 @@ namespace TheChest.Inventories.Containers
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual T Get(T item)
         {
             if (item is null)
@@ -249,13 +277,13 @@ namespace TheChest.Inventories.Containers
                 }
             }
             
-            return default;
+            return default!;
         }
         /// <inheritdoc/>
         /// <remarks>
         /// The method fires the <see cref="OnGet"/> event when the maximum possible <paramref name="amount"/> of <paramref name="item"/> is found.
         /// </remarks>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         /// <exception cref="ArgumentOutOfRangeException">When <paramref name="amount"/> is zero or smaller</exception>
         public virtual T[] Get(T item, int amount)
         {
@@ -286,8 +314,9 @@ namespace TheChest.Inventories.Containers
 
             return items.ToArray();
         }
+
         /// <inheritdoc/>
-        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is null</exception>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
         public virtual int GetCount(T item)
         {
             if (item is null)
@@ -302,6 +331,19 @@ namespace TheChest.Inventories.Containers
                 }
             }
             return count;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool CanMove(int origin, int target)
+        {
+            if (origin < 0 || origin >= this.Size)
+                return false;
+            if (target < 0 || target >= this.Size)
+                return false;
+            if (this.slots[origin].IsEmpty && this.slots[target].IsEmpty)
+                return false;
+
+            return true;
         }
         /// <inheritdoc/>
         /// <remarks>
@@ -328,6 +370,47 @@ namespace TheChest.Inventories.Containers
                 events.Add(new InventoryMoveItemEventData<T>(oldItem, target, origin));
             }
             this.OnMove?.Invoke(this, new InventoryMoveEventArgs<T>(events.ToArray()));
+        }
+
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>"
+        public virtual bool CanReplace(T item, int index)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return this.slots[index].CanReplace(item);
+        }
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">When <paramref name="item"/> is <see langword="null"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">When <paramref name="index"/> is smaller than zero or bigger than <see cref="Container{T}.Size"/></exception>
+        public virtual T Replace(T item, int index)
+        {
+            if(item is null)
+                throw new ArgumentNullException(nameof(item));
+            if (index < 0 || index >= this.Size)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var slot = this.slots[index];
+            if (slot.IsEmpty)
+            {
+                var added = slot.Add(item);
+                if (added)
+                {
+                    this.OnReplace?.Invoke(this, (index, default!, item));
+                    return default!;
+                }
+                
+                return item;
+            }
+
+            var oldItem = slot.Replace(item);
+            this.OnReplace?.Invoke(this, (index, oldItem, item));
+
+            return oldItem;
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "com.thechest.unity",
+  "name": "com.thechest.inventories",
   "version": "0.5.0",
   "displayName": "The Chest",
   "description": "A inventory system for Unity.",
@@ -7,5 +7,6 @@
   "author": {
     "name": "Franklin Bitencourt"
   },
-  "type": "library"
+  "type": "library",
+  "unityRelease": "17f1"
 }
